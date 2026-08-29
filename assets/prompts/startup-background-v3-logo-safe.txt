@@ -1,8 +1,0 @@
-Use case: precise-object-edit
-Asset type: production 4K 16:9 Wurm Unlimited startup background
-Input image: Image 1 is the exact edit target.
-Primary request: Change only the placement and apparent distance of the four background colossi. Move the complete Fo → Magranon → Vynora → Libila procession farther back into the mountain valley and lower on the horizon. Scale them down modestly so the top 24% of the image becomes clean atmospheric sky/logo-safe space. Align their heads just below that upper logo-safe band, keep all four full upper bodies clearly visible between the logo-safe sky and the foreground adventurers, and preserve their exact left-to-right order, identities, visual motifs, lighting, and atmospheric perspective.
-Invariants: preserve every foreground person exactly, especially the adult female druid and her complete black hell horse on the far right; preserve all faces, poses, outfits, horse anatomy, waterfall settlement, bridge, river, valley, palette, lighting, camera, and 16:9 composition. Do not add, remove, duplicate, or reorder any person, horse, or colossus.
-Text: no text, no letters, no logo, no watermark.
-Constraints: uppermost 24% must be uncluttered sky for a large centered SKLOTOPOLIS wordmark and a left WURM UNLIMITED SERVER badge; colossi must remain readable immediately below it.
-Avoid: changing the druid or horse, cropping colossi, hiding their heads, extra gods, labels, rearranged order, duplicated figures, altered faces, new props, UI, borders, progress bars, words, logos.

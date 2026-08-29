@@ -1,7 +1,0 @@
-Use case: precise-object-edit
-Asset type: production 4K 16:9 startup/loading background for the Wurm Unlimited game client
-Input image: Image 1 is the exact edit target and composition reference.
-Primary request: Create a faithful high-resolution 3840x2160 remaster of Image 1. Preserve the entire painted fantasy landscape, all four central characters, the left castle, waterfall and lake, distant right figures, architecture, composition, camera, palette, lighting, mist, poses, clothing, faces, and every spatial relationship. Increase fine painterly detail, edge clarity, and texture fidelity so the image remains crisp when displayed at 4K. Remove only the entire baked-in WURM UNLIMITED logo, orange sword/glow, and all lettering from the upper center, then naturally reconstruct the pale stone arch, sky, mist, and landscape that would continue behind it. Leave generous clean visual space across the upper center for separately composited logos.
-Text: no text anywhere.
-Constraints: output must be 3840x2160 landscape, exact 16:9; preserve the original scene and characters aggressively; no cropping; no new characters or objects; the upper center must contain no remnants, ghosting, letters, sword, or logo.
-Avoid: any words, letters, symbols, watermark, invented branding, layout changes, face changes, pose changes, costume changes, extra limbs, added weapons, modern UI, borders, progress bars.
