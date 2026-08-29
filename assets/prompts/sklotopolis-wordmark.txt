@@ -1,0 +1,8 @@
+Use case: background-extraction
+Asset type: high-resolution transparent official server wordmark for 4K game-startup compositing
+Input image: Image 1 is the exact Sklotopolis wordmark reference supplied by the server community.
+Primary request: Faithfully upscale and remaster only the existing SKLOTOPOLIS wordmark at very high resolution. Preserve the exact spelling, medieval serif letterforms, proportions, gold/parchment fill, warm brown outline, subtle bevel, and tiny ornamental curls. Remove any opaque background and produce a genuinely transparent RGBA background with clean antialiased edges.
+Text (verbatim): "SKLOTOPOLIS". Spell it exactly: S K L O T O P O L I S.
+Composition: centered single-line wordmark, wide landscape canvas, generous transparent padding, no other content.
+Constraints: exact existing design; transparent background; no redesign; no new emblem; no extra words; no watermark; no baked checkerboard.
+Avoid: spelling changes, missing letters, added letters, Wurm text, sword, plaque, scenery, opaque background.

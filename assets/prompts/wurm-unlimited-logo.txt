@@ -1,0 +1,8 @@
+Use case: background-extraction
+Asset type: high-resolution transparent game-logo master for 4K compositing
+Input image: Image 1 is the exact logo reference cropped from the official Wurm Unlimited startup art.
+Primary request: Extract and faithfully remaster only the complete WURM UNLIMITED logo and its horizontal gold line, orange glow, and vertical sword. Reconstruct any partially obscured lower edges cleanly. Remove the entire painted background and the partial character head. Produce a genuinely transparent RGBA background. Increase edge clarity and fine metallic detail for 4K use while preserving the official shapes, proportions, silver beveled WURM letters, thin dark shadow, orange/gold outlines, spaced UNLIMITED letters, line, glow, and sword.
+Text (verbatim): "WURM" and "UNLIMITED". Spell both exactly and preserve their existing letterforms.
+Composition: centered logo, full logo visible with generous transparent padding; landscape canvas approximately 2.1:1; straight-on.
+Constraints: transparent background; exact spelling; no redesign; no extra text; no character; no scene; no cropping; no watermark.
+Avoid: WURM ONLINE, Sklotopolis text, incorrect letters, altered word, plaque, opaque background, checkerboard baked into pixels, new symbols.

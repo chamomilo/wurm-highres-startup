@@ -1,0 +1,19 @@
+Use startup-background-imagegen-v4.png as the edit target. Use the four exact
+in-game PNG renders fo-avatar-game.png, magranon-avatar-game.png,
+vynora-avatar-game.png, and libila-avatar-game.png as identity, anatomy, and
+color references in that order.
+
+Preserve the foreground party, central female druid, fiery black hell horse,
+valley, waterfall, bridge, settlement, camera, and saturated golden-hour light.
+Replace only the four generic sky gods with Fo, Magranon, Vynora, and Libila,
+left to right. Make them colossal living avatars rising nearly to the top of the
+sky. Keep every defining silhouette and prop faithful to the game render.
+
+Apply a restrained second enrichment pass: deeper bark and luminous moss for
+Fo; richer fur, leather, chain and metal for Magranon; subtle water sheen,
+scales and cool radiance for Vynora; richer bone armor, wing membranes, purple
+cloth, bone scythe and restrained violet rim light for Libila. Increase majesty
+through scale, pose, atmosphere, and light, without redesigning any avatar.
+
+Exactly four avatars, fully separated. No extra gods, stone colossi, duplicate
+characters, text, logos, badges, UI, loading bars, captions, or watermarks.

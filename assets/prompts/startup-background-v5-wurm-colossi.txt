@@ -1,0 +1,24 @@
+Use case: precise-object-edit / compositing.
+Asset type: 16:9 fantasy game loading-screen background.
+
+The current background is the edit target. The three supplied Wurm Unlimited
+screenshots are visual references only for the canonical deity-colossus models;
+ignore their game UI, vegetation, camera framing, and text.
+
+Replace only the four generic fantasy gods with the four recognizable Wurm
+stone-brick deity colossi. Preserve the foreground party, every hero, the female
+druid, fiery black hell horse, bridge, waterfall, settlement, terrain, lighting,
+saturated painterly realism, and 16:9 framing. Add no text or logo.
+
+Arrange them left-to-right as Fo, Magranon, Vynora, and Libila. Fo is the
+hunched horned and toothy Wurm creature with an open jagged mouth, angular body,
+and expressive upturned hand. Magranon is the massive squat crouching colossus
+with a rounded body and thick limbs. Vynora is the tall slender robed feminine
+statue with graceful hands. Libila is the horned bat-winged figure holding a
+skull aloft, with skull ornaments. Match the screenshots' anatomy, proportions,
+poses, rough rectangular stone courses, horns, wings, and accessories.
+
+All four rise from the distant horizon almost to the top of the sky and remain
+behind the living heroes. Keep exactly four, with separated readable
+silhouettes. No molten cracks, tree god, ice queen, armored dark knight, human
+god faces, UI, labels, typography, badge, progress bar, or watermark.
