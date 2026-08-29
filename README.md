@@ -21,6 +21,8 @@ mod is required.
 
 Requires Ago's Wurm Unlimited Client Mod Launcher.
 
+[Download the latest installable ZIP from GitHub Releases.](https://github.com/chamomilo/wurm-highres-startup/releases/latest)
+
 1. Extract the distribution into `WurmLauncher` and merge its `mods` directory.
 2. Fully close any running WurmLauncher process, then start the modded client.
 
