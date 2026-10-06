@@ -1,0 +1,141 @@
+import java.util.Properties
+import javax.imageio.ImageIO
+
+plugins {
+    id 'java'
+}
+
+group = 'org.highresstartup'
+version = '0.3.6'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories { mavenCentral() }
+
+def localProperties = new Properties()
+def localPropertiesFile = file('local.properties')
+if (localPropertiesFile.isFile()) {
+    localPropertiesFile.withInputStream { localProperties.load(it) }
+}
+
+def configuredLibraryDirectory = findProperty('wurmClientLibDir')
+if (configuredLibraryDirectory == null || configuredLibraryDirectory.toString().trim().isEmpty()) {
+    configuredLibraryDirectory = localProperties.getProperty('wurmClientLibDir')
+}
+if (configuredLibraryDirectory == null || configuredLibraryDirectory.toString().trim().isEmpty()) {
+    configuredLibraryDirectory = System.getenv('WURM_CLIENT_LIBS')
+}
+if (configuredLibraryDirectory == null || configuredLibraryDirectory.toString().trim().isEmpty()) {
+    configuredLibraryDirectory = 'C:/projects/wurm/libs'
+}
+
+def wurmClientLibDir = file(configuredLibraryDirectory.toString())
+def requiredClientLibraries = [
+        'client-patched.jar',
+        'common.jar',
+        'javassist.jar',
+        'modlauncher.jar'
+].collect { new File(wurmClientLibDir, it) }
+
+requiredClientLibraries.each { library ->
+    if (!library.isFile()) {
+        throw new GradleException('Required Wurm client library is missing: ' + library)
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    compileOnly files(requiredClientLibraries)
+    testImplementation files(requiredClientLibraries)
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    archiveFileName = "highres-startup-${project.version}.jar"
+}
+
+task resourcePack(type: Jar) {
+    archiveFileName = "highres-startup-resources-${project.version}.jar"
+    destinationDirectory = file("${buildDir}/resource-pack")
+    from('resource-pack')
+}
+
+task verifyRuntimeHook(type: JavaExec, dependsOn: [testClasses, resourcePack]) {
+    classpath = sourceSets.test.runtimeClasspath
+    main = 'org.highresstartup.client.HighResStartupHookSmoke'
+    args resourcePack.archiveFile.get().asFile.absolutePath
+}
+
+task verifyArtwork {
+    doLast {
+        def splashFile = file('resource-pack/startup/highres-startupscreen.png')
+        if (!splashFile.isFile()) {
+            throw new GradleException('Missing 4K startup image: ' + splashFile)
+        }
+        def splash = ImageIO.read(splashFile)
+        if (splash == null || splash.width != 3840 || splash.height != 2160) {
+            throw new GradleException('Startup image must be exactly 3840x2160')
+        }
+
+        def mappings = file('resource-pack/mappings.txt').readLines('UTF-8')
+                .findAll { !it.trim().isEmpty() && !it.trim().startsWith('#') }
+                .collectEntries { line ->
+                    def separator = line.indexOf('=')
+                    if (separator <= 0) {
+                        throw new GradleException('Malformed resource mapping: ' + line)
+                    }
+                    [(line.substring(0, separator).trim()):
+                             line.substring(separator + 1).trim()]
+                }
+        if (mappings['img.startup.splash'] != 'startup/highres-startupscreen.png') {
+            throw new GradleException('img.startup.splash mapping is missing or invalid')
+        }
+    }
+}
+
+task verifyArtifacts(dependsOn: [jar, resourcePack, verifyArtwork,
+                                 verifyRuntimeHook]) {
+    doLast {
+        def modContents = zipTree(jar.archiveFile.get().asFile)
+        [
+                'org/highresstartup/client/HighResStartupMod.class',
+                'org/highresstartup/client/HighResStartupResources.class',
+                'org/highresstartup/client/HighResStartupSettings.class'
+        ].each { requiredClass ->
+            if (modContents.matching { include requiredClass }.files.empty) {
+                throw new GradleException('Mod artifact is missing ' + requiredClass)
+            }
+        }
+
+        def packContents = zipTree(resourcePack.archiveFile.get().asFile)
+        ['mappings.txt', 'startup/highres-startupscreen.png'].each { requiredResource ->
+            if (packContents.matching { include requiredResource }.files.empty) {
+                throw new GradleException('Resource pack is missing ' + requiredResource)
+            }
+        }
+    }
+}
+
+task dist(type: Zip, dependsOn: verifyArtifacts) {
+    archiveFileName = "highres-startup-${project.version}.zip"
+    destinationDirectory = file("${buildDir}/distributions")
+
+    into('mods/highres-startup') {
+        from jar
+        from resourcePack
+        from 'README.md'
+        from 'LICENSE'
+    }
+    into('mods') {
+        from 'mods/highres-startup.properties'
+    }
+}
+
+build.dependsOn verifyArtifacts
+
+ext.chamomiloUpdate = [id: 'highres-startup', name: 'HighRes Startup', repo: 'chamomilo/wurm-highres-startup', asset: 'highres-startup-{version}.zip', properties: 'mods/highres-startup.properties', main: 'src/main/java/org/highresstartup/client/HighResStartupMod.java']
+apply from: 'gradle/chamomilo-updater.gradle'
