@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.highresstartup'
-version = '0.3.9'
+version = '0.4.1'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -74,6 +74,10 @@ task resourcePack(type: Jar) {
     archiveFileName = "highres-startup-resources-${project.version}.jar"
     destinationDirectory = file("${buildDir}/resource-pack")
     from('resource-pack')
+    from('src/main/resources/org/highresstartup/client/screens.properties') {
+        into 'startup'
+        rename { 'library.properties' }
+    }
 }
 
 task verifyRuntimeHook(type: JavaExec, dependsOn: [testClasses, resourcePack]) {
@@ -84,13 +88,25 @@ task verifyRuntimeHook(type: JavaExec, dependsOn: [testClasses, resourcePack]) {
 
 task verifyArtwork {
     doLast {
-        def splashFile = file('resource-pack/startup/highres-startupscreen.png')
-        if (!splashFile.isFile()) {
-            throw new GradleException('Missing 4K startup image: ' + splashFile)
+        def library = new Properties()
+        file('src/main/resources/org/highresstartup/client/screens.properties').withInputStream { library.load(it) }
+        def ids = library.getProperty('screens', '').split(',').collect { it.trim() }
+        if (ids.size() < 2 || ids.toSet().size() != ids.size()) {
+            throw new GradleException('Screen library must contain at least two unique screens')
         }
-        def splash = ImageIO.read(splashFile)
-        if (splash == null || splash.width != 3840 || splash.height != 2160) {
-            throw new GradleException('Startup image must be exactly 3840x2160')
+        ids.each { id ->
+            def imagePath = library.getProperty(id + '.image', '')
+            if (!(id ==~ /[a-z][a-z0-9-]*/) || id == 'random' ||
+                    !(imagePath ==~ /startup\/[a-z0-9-]+\.png/) ||
+                    !library.getProperty(id + '.title', '').trim()) {
+                throw new GradleException('Invalid screen library entry: ' + id)
+            }
+            def splashFile = file('resource-pack/' + imagePath)
+            if (!splashFile.isFile()) throw new GradleException('Missing 4K startup image: ' + splashFile)
+            def splash = ImageIO.read(splashFile)
+            if (splash == null || splash.width != 3840 || splash.height != 2160) {
+                throw new GradleException('Startup image must be exactly 3840x2160: ' + imagePath)
+            }
         }
 
         def mappings = file('resource-pack/mappings.txt').readLines('UTF-8')
@@ -116,7 +132,9 @@ task verifyArtifacts(dependsOn: [jar, resourcePack, verifyArtwork,
         [
                 'org/highresstartup/client/HighResStartupMod.class',
                 'org/highresstartup/client/HighResStartupResources.class',
-                'org/highresstartup/client/HighResStartupSettings.class'
+                'org/highresstartup/client/HighResStartupSettings.class',
+                'org/highresstartup/client/HighResStartupLibrary.class',
+                'org/highresstartup/client/screens.properties'
         ].each { requiredClass ->
             if (modContents.matching { include requiredClass }.files.empty) {
                 throw new GradleException('Mod artifact is missing ' + requiredClass)
@@ -124,7 +142,8 @@ task verifyArtifacts(dependsOn: [jar, resourcePack, verifyArtwork,
         }
 
         def packContents = zipTree(resourcePack.archiveFile.get().asFile)
-        ['mappings.txt', 'startup/highres-startupscreen.png'].each { requiredResource ->
+        ['mappings.txt', 'startup/library.properties',
+         'startup/highres-startupscreen.png', 'startup/wurm-reimagined.png'].each { requiredResource ->
             if (packContents.matching { include requiredResource }.files.empty) {
                 throw new GradleException('Resource pack is missing ' + requiredResource)
             }
@@ -134,7 +153,7 @@ task verifyArtifacts(dependsOn: [jar, resourcePack, verifyArtwork,
 
 task dist(type: Zip, dependsOn: verifyArtifacts) {
     archiveFileName = "highres-startup-${project.version}.zip"
-    destinationDirectory = file("${buildDir}/distributions")
+    destinationDirectory = file('dist')
 
     into('mods/highres-startup') {
         from jar

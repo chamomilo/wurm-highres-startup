@@ -15,12 +15,12 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/** Loads the 4K branded startup-screen resource pack. */
+/** Loads the 4K startup-screen library. */
 public final class HighResStartupMod implements
         org.gotti.wurmunlimited.modloader.interfaces.ModListener,
         WurmClientMod, Configurable,
         PreInitable, Initable {
-    public static final String VERSION = "0.3.9";
+    public static final String VERSION = "0.4.1";
     private static final Logger LOG = Logger.getLogger("HighResStartup");
 
     @Override
@@ -30,6 +30,8 @@ public final class HighResStartupMod implements
 
     @Override
     public void configure(Properties properties) {
+        properties = org.chamomilo.wurm.update.SharedModSettings.configure("highres-startup",properties,
+                ModSettingsSchema.specs(),(key,values) -> { });
         HighResStartupSettings.configure(properties);
     }
 
@@ -72,7 +74,7 @@ public final class HighResStartupMod implements
     @Override
     public void init() {
         org.chamomilo.wurm.update.SharedUpdateHooks.registerHost("highres-startup");
-        LOG.info("High-resolution Sklotopolis startup screen " + VERSION
+        LOG.info("High-resolution startup-screen library " + VERSION
                 + " initialized");
     }
 

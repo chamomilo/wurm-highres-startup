@@ -7,6 +7,8 @@ import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
 import java.awt.image.BufferedImage;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.io.File;
+import java.util.Random;
 
 public final class HighResStartupHookSmoke {
     private HighResStartupHookSmoke() {
@@ -19,6 +21,7 @@ public final class HighResStartupHookSmoke {
 
         Properties properties = new Properties();
         properties.setProperty("resourcePack", arguments[0]);
+        properties.setProperty("startupScreen", "random");
         HighResStartupMod mod = new HighResStartupMod();
         mod.configure(properties);
         mod.preInit();
@@ -39,7 +42,19 @@ public final class HighResStartupHookSmoke {
                 || image.getHeight() != 2160) {
             throw new AssertionError("Direct startup image is not 3840x2160");
         }
+        if (image != HighResStartupResources.loadStartupImage()) {
+            throw new AssertionError("Reconnect changed the selected startup image");
+        }
+        for (HighResStartupLibrary.Screen screen : HighResStartupLibrary.SCREENS) {
+            BufferedImage selected = HighResStartupResources.loadFromPack(
+                    new File(arguments[0]), screen.id, new Random(0));
+            if (selected == null || selected.getWidth() != 3840 || selected.getHeight() != 2160) {
+                throw new AssertionError("Library screen is not 3840x2160: " + screen.id);
+            }
+            selected.flush();
+        }
         System.out.println("Verified direct StartupRenderer hook and "
-                + image.getWidth() + "x" + image.getHeight() + " image");
+                + HighResStartupLibrary.SCREENS.size() + " library screens, "
+                + image.getWidth() + "x" + image.getHeight() + ", stable reconnect selection");
     }
 }

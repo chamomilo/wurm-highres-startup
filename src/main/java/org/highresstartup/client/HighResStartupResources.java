@@ -9,11 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public final class HighResStartupResources {
     private static final Logger LOG = Logger.getLogger("HighResStartup");
-    private static final String IMAGE_ENTRY =
-            "startup/highres-startupscreen.png";
     private static boolean attempted;
     private static BufferedImage startupImage;
 
@@ -25,30 +27,41 @@ public final class HighResStartupResources {
         if (attempted) return null;
         attempted = true;
 
-        File pack = resolvePack();
+        startupImage = loadFromPack(HighResStartupSettings.resolvePack(),
+                HighResStartupSettings.startupScreen, new Random());
+        return startupImage;
+    }
+
+    /** Loads only one full-resolution image; failed candidates never prevent a fallback. */
+    static BufferedImage loadFromPack(File pack, String selection, Random random) {
         if (!pack.isFile()) {
             LOG.severe("Startup-screen image archive is missing: " + pack);
             return null;
         }
 
         try (ZipFile archive = new ZipFile(pack)) {
-            ZipEntry entry = archive.getEntry(IMAGE_ENTRY);
-            if (entry == null) {
-                LOG.severe("Startup image is missing from archive: "
-                        + IMAGE_ENTRY + " in " + pack);
-                return null;
+            List<HighResStartupLibrary.Screen> candidates = candidates(selection, random);
+            for (HighResStartupLibrary.Screen screen : candidates) {
+                ZipEntry entry = archive.getEntry(screen.imageEntry);
+                if (entry == null) {
+                    LOG.warning("Startup image is missing: " + screen.imageEntry + " in " + pack);
+                    continue;
+                }
+                try (InputStream input = archive.getInputStream(entry)) {
+                    BufferedImage image = ImageIO.read(input);
+                    if (image == null || image.getWidth() != 3840 || image.getHeight() != 2160) {
+                        LOG.warning("Startup image is unreadable or not 3840x2160: " + screen.imageEntry);
+                        continue;
+                    }
+                    LOG.info("Loaded startup screen '" + screen.title + "' (" + screen.id
+                            + "): " + image.getWidth() + "x" + image.getHeight() + " from " + pack);
+                    return image;
+                } catch (IOException error) {
+                    LOG.log(Level.WARNING, "Unable to read startup screen: " + screen.imageEntry, error);
+                }
             }
-            try (InputStream input = archive.getInputStream(entry)) {
-                startupImage = ImageIO.read(input);
-            }
-            if (startupImage == null) {
-                LOG.severe("Java could not decode startup image: " + pack);
-                return null;
-            }
-            LOG.info("Loaded Sklotopolis startup image directly: "
-                    + startupImage.getWidth() + "x"
-                    + startupImage.getHeight() + " from " + pack);
-            return startupImage;
+            LOG.severe("No usable startup screens in " + pack + "; using the stock screen");
+            return null;
         } catch (IOException error) {
             LOG.log(Level.SEVERE,
                     "Unable to read startup image directly from " + pack,
@@ -57,12 +70,18 @@ public final class HighResStartupResources {
         }
     }
 
-    private static File resolvePack() {
-        File pack = new File(HighResStartupSettings.resourcePack);
-        if (!pack.isAbsolute()) {
-            pack = new File(System.getProperty("user.dir"),
-                    HighResStartupSettings.resourcePack);
+    static List<HighResStartupLibrary.Screen> candidates(String selection, Random random) {
+        List<HighResStartupLibrary.Screen> result =
+                new ArrayList<HighResStartupLibrary.Screen>(HighResStartupLibrary.SCREENS);
+        Collections.shuffle(result, random);
+        if (!HighResStartupLibrary.RANDOM.equals(selection)) {
+            for (int i = 0; i < result.size(); i++) {
+                if (result.get(i).id.equals(selection)) {
+                    result.add(0, result.remove(i));
+                    break;
+                }
+            }
         }
-        return pack.getAbsoluteFile();
+        return result;
     }
 }
