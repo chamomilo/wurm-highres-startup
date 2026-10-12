@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.highresstartup'
-version = '0.4.1'
+version = '0.4.3'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -86,6 +86,31 @@ task verifyRuntimeHook(type: JavaExec, dependsOn: [testClasses, resourcePack]) {
     args resourcePack.archiveFile.get().asFile.absolutePath
 }
 
+def runtimeFixture = file("${buildDir}/startup-runtime-fixture")
+task preparePackagedRuntimeFixture(dependsOn: [jar, resourcePack]) {
+    doLast {
+        copy {
+            from jar
+            from resourcePack
+            into new File(runtimeFixture, 'mods/highres-startup')
+        }
+        copy {
+            from 'mods/highres-startup.properties'
+            into new File(runtimeFixture, 'mods')
+        }
+    }
+}
+
+task verifyPackagedRuntimeHook(type: JavaExec, dependsOn: [testClasses, preparePackagedRuntimeFixture]) {
+    // Product classes/resources must exist only in the packaged JAR, as in Wurm.
+    classpath = files(sourceSets.test.output.classesDirs) + files(requiredClientLibraries)
+    main = 'HighResStartupSharedLoaderSmoke'
+    workingDir runtimeFixture
+    systemProperty 'user.home', new File(runtimeFixture, 'home').absolutePath
+    args new File(runtimeFixture, "mods/highres-startup/highres-startup-${project.version}.jar").absolutePath,
+            new File(runtimeFixture, "mods/highres-startup/highres-startup-resources-${project.version}.jar").absolutePath
+}
+
 task verifyArtwork {
     doLast {
         def library = new Properties()
@@ -126,7 +151,7 @@ task verifyArtwork {
 }
 
 task verifyArtifacts(dependsOn: [jar, resourcePack, verifyArtwork,
-                                 verifyRuntimeHook]) {
+                                 verifyRuntimeHook, verifyPackagedRuntimeHook]) {
     doLast {
         def modContents = zipTree(jar.archiveFile.get().asFile)
         [

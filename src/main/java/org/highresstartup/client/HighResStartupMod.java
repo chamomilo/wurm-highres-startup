@@ -20,7 +20,7 @@ public final class HighResStartupMod implements
         org.gotti.wurmunlimited.modloader.interfaces.ModListener,
         WurmClientMod, Configurable,
         PreInitable, Initable {
-    public static final String VERSION = "0.4.1";
+    public static final String VERSION = "0.4.3";
     private static final Logger LOG = Logger.getLogger("HighResStartup");
 
     @Override

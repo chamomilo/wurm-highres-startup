@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.3 — 2026-10-13
+
+- Rebuild with the complete canonical Chamomilo updater 1.5.0 and its shared Settings editor.
+- Verify that the packaged mod registers both settings, saves explicit screen overrides and keeps the active image unchanged until restart.
+- Include the startup-catalogue crash fix from 0.4.2.
+- Replace the illustrated README and installation ZIP's plain-text guide; remove temporary diagnostics, build caches and obsolete distributions from the project folder.
+- Keep the installable ZIP limited to the descriptor, two runtime JARs and README.txt.
+
+## 0.4.2 — 2026-10-13
+
+- Fix a client startup crash in 0.4.1: Wurm's shared Javassist loader could not find the screen catalogue through the standard resource API.
+- Read the catalogue beside the library class in the active mod JAR when the standard resource lookup is unavailable.
+- Verify the packaged mod's configuration, lifecycle, renderer hook, 4K image and reconnect caching through Wurm's real loader, with no mod resources on the parent classpath.
+
 ## 0.4.1 — 2026-10-13
 
 - Rebuild and verify the complete canonical Chamomilo updater 1.5.0 in the mod JAR and installation ZIP.

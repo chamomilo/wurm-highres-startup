@@ -2,6 +2,7 @@ package org.highresstartup.client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,7 @@ final class HighResStartupLibrary {
 
     private static List<Screen> readCatalogue() {
         Properties properties = new Properties();
-        try (InputStream input = HighResStartupLibrary.class.getResourceAsStream("screens.properties")) {
+        try (InputStream input = openCatalogue()) {
             if (input == null) throw new IOException("Missing startup-screen catalogue");
             properties.load(input);
         } catch (IOException error) {
@@ -51,6 +52,17 @@ final class HighResStartupLibrary {
             screens.add(new Screen(id, title, path));
         }
         return Collections.unmodifiableList(screens);
+    }
+
+    private static InputStream openCatalogue() throws IOException {
+        InputStream input = HighResStartupLibrary.class.getResourceAsStream("screens.properties");
+        if (input != null) return input;
+        // Wurm's shared Javassist loader loads classes from mod JARs, but does
+        // not expose their resources. Resolve beside this class in its active JAR.
+        URL classFile = org.gotti.wurmunlimited.modloader.classhooks.HookManager
+                .getInstance().getClassPool().find(HighResStartupLibrary.class.getName());
+        if (classFile == null) throw new IOException("Cannot locate startup-screen catalogue JAR");
+        return new URL(classFile, "screens.properties").openStream();
     }
 
     static final class Screen {

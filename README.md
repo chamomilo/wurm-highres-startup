@@ -1,123 +1,135 @@
 <p align="center">
-  <img src="assets/icons/highres-startup-logo-128.png" width="128" height="128" alt="HighRes Startup">
+  <img src="assets/icons/highres-startup-logo-128.png" width="128" height="128" alt="HighRes Startup logo">
 </p>
 
 # HighRes Startup
 
-Two loading-screen illustrations for **Wurm Unlimited**, packaged at
-**3840 × 2160**. Pick a favourite or let the mod choose a screen at random on
-launch. The native loading messages, progress display and reconnect controls
-continue to work as usual.
+A **4K loading-screen library for Wurm Unlimited**. Choose Wurm Reimagined or
+Sklotopolis, or let the mod pick either illustration at random on each launch.
+The game's loading text, progress display and reconnect controls remain available.
 
-**Version 0.4.1** · **Chamomilo updater 1.5.0**
+**0.4.3** · **3840 × 2160 artwork** · **Chamomilo updater 1.5.0 with Settings**
 
-[Download the installation ZIP](https://github.com/chamomilo/wurm-highres-startup/releases/latest)
+[Download the latest ZIP](https://github.com/chamomilo/wurm-highres-startup/releases/latest)
+· [Release notes](CHANGELOG.md)
 · [Report an issue](https://github.com/chamomilo/wurm-highres-startup/issues)
 
-## Screen library
+## Included screens
 
 ### Wurm Reimagined
 
-A brighter and more detailed version of the familiar Wurm composition: four
-adventurers, the castle and water mill, and a giant emerging through the mist.
+Adventurers, a water mill and a mountain castle beneath the familiar Wurm logo,
+with a giant appearing through the mist.
 
-![Wurm Reimagined loading screen](assets/wurm-reimagined-preview.png)
+![Wurm Reimagined loading-screen preview](assets/wurm-reimagined-preview.png)
 
 ### Sklotopolis
 
-The Sklotopolis illustration with a party of adventurers, a riverside settlement
-and towering gods in the background.
+A riverside settlement and a party of adventurers beneath the Sklotopolis banner,
+with towering gods in the background.
 
-![Sklotopolis loading screen](assets/highres-startup-preview.png)
+![Sklotopolis loading-screen preview](assets/highres-startup-preview.png)
 
-## Choose a screen
-
-Open **Mod updates**, find **HighRes Startup**, and click **Settings**.
-The **Startup screen** selector offers:
-
-| Choice | Behaviour |
-| --- | --- |
-| `random` | Choose either screen with equal probability on each client launch. This is the default. |
-| `wurm-reimagined` | Always show Wurm Reimagined. |
-| `sklotopolis` | Always show Sklotopolis. |
-
-Restart the client after changing the selection. Reconnecting keeps the current
-screen. Random selection can show the same image on consecutive launches.
+Both images are included at **3840 × 2160**. The previews above are smaller
+copies for this guide.
 
 ## Install or update
 
 Requires **Wurm Unlimited** and
 [Ago's Client Mod Launcher](https://github.com/ago1024/WurmClientModLauncher).
 
-1. Close the game and WurmLauncher completely.
-2. Download **highres-startup-0.4.1.zip** from Releases.
-3. Extract it into the game's **WurmLauncher** directory, merging the included
-   `mods` folder.
-4. When updating, remove the older `highres-startup-<version>.jar` and
+1. Close Wurm Unlimited and WurmLauncher completely.
+2. Download **highres-startup-0.4.3.zip** from
+   [Releases](https://github.com/chamomilo/wurm-highres-startup/releases/latest).
+3. If updating, remove the older `highres-startup-<version>.jar` and
    `highres-startup-resources-<version>.jar` from `mods/highres-startup`.
-5. Start the client through the mod launcher.
+4. Extract the ZIP into **WurmLauncher**, merging `mods` and replacing
+   `mods/highres-startup.properties`.
+5. Start the game through the mod launcher.
 
-The installed layout must be:
+The installed mod must have this layout:
 
 ```text
 WurmLauncher/
   mods/
     highres-startup.properties
     highres-startup/
-      highres-startup-0.4.1.jar
-      highres-startup-resources-0.4.1.jar
+      highres-startup-0.4.3.jar
+      highres-startup-resources-0.4.3.jar
 ```
 
-The ZIP contains those three mod files and **README.txt**. The resource JAR
-contains both images and the screen catalogue; the main JAR includes the shared
-updater and license. Both JARs are required.
+**Both JARs are required.** The main JAR contains the mod, shared updater and
+license; the resource JAR contains the screen library. The ZIP contains these
+three mod files and **README.txt**.
+
+## Settings
+
+Open **Mod updates → HighRes Startup → Settings** after entering the game.
+
+| Setting | What it does |
+| --- | --- |
+| **Startup screen** | `random` selects either illustration with equal probability on each launch; `wurm-reimagined` or `sklotopolis` keeps a fixed screen. Default: `random`. |
+| **Startup image resource pack** | Path to the JAR containing both images. Default: `mods/highres-startup/highres-startup-resources-0.4.3.jar`. |
+
+The editor saves valid changes automatically and provides hover help.
+**Both settings apply after restarting the client.** A saved change shows a
+restart reminder; the exit action opens Wurm's normal quit confirmation.
+
+Reconnecting preserves the current image. Random selection can choose the same
+screen on consecutive launches.
+
+Your explicit overrides are stored in
+`~/.chamomilo/mod-settings/highres-startup.properties`, outside the installation.
+On Windows, `~` means your user folder. An unchanged resource-pack setting follows
+the new version when you update; if you explicitly saved a custom path, update
+that path when replacing its JAR.
 
 ## Shared mod updates
 
-Chamomilo updater **1.5.0** checks participating mods in one shared window after
-the game HUD is ready. Open **Mod updates** to return to the registry, check
-available releases or change settings. **DOWNLOAD** opens the release page;
-download and install updates manually, then restart the client.
+The embedded **Chamomilo updater 1.5.0** checks participating mods together once
+the game HUD is ready. Use **Mod updates** to check releases and open each
+installed mod's **Settings**. **DOWNLOAD** opens the release page for manual
+download and installation.
 
-The updater selects the newest compatible embedded module among installed
-Chamomilo mods. Its language selector supports **English**, **Brazilian
-Portuguese**, **German** and **Russian**. Language and startup visibility
-preferences are shared between participating mods.
+The shared language selector supports **English**, **Brazilian Portuguese**,
+**German** and **Russian**. Language and startup visibility preferences are
+shared between participating Chamomilo mods. When several mods embed the updater,
+the newest compatible module is selected.
 
 ## Troubleshooting
 
-- **The stock screen still appears:** check the installation layout and launch
-  the client through the mod launcher.
-- **Artwork is missing:** keep both versioned JARs together. The `resourcePack`
-  setting must point to the current resource JAR.
-- **A screen cannot be loaded:** the mod tries another library image, then
-  allows the game's normal fallback. Include the mod version and relevant
-  `HighResStartup` log lines in an issue report.
+| Symptom | Check |
+| --- | --- |
+| The standard loading screen appears | Confirm the layout above and start through the mod launcher. |
+| An image cannot be loaded | Keep both JARs installed and check the resource-pack path in Settings. The mod tries the other library image before allowing the game's normal fallback. |
+| A new selection does not appear | Restart the client fully; reconnecting keeps the current screen. |
+| The client stopped launching after installing 0.4.1 | Install 0.4.3, which includes the catalogue-loading fix verified with Wurm's shared loader. |
 
-To uninstall, close the client and remove `mods/highres-startup.properties`
-and the `mods/highres-startup` directory.
+For an issue report, include the installed mod version and relevant
+`HighResStartup` lines from `WurmLauncher/client.log`.
+
+To uninstall, close the client, then remove `mods/highres-startup.properties`
+and `mods/highres-startup`.
 
 ## Build from source
 
-Use **JDK 8**, the Gradle wrapper and the canonical **Chamomilo updater**
-reference project. Provide the client libraries read-only: `client-patched.jar`,
-`common.jar`, `javassist.jar` and `modlauncher.jar`. The updater reference also
-requires its JUnit, Hamcrest and JavaFX libraries, as described in its
-integration guide.
+Use **JDK 8**, the Gradle wrapper and the canonical Chamomilo updater reference.
+Provide `client-patched.jar`, `common.jar`, `javassist.jar`, `modlauncher.jar`,
+`junit-4.13.2.jar` and `hamcrest-core-1.3.jar` in a client-library directory.
 
 ```text
-gradlew clean test build dist -PwurmClientLibDir=/path/to/client/libraries -PchamomiloUpdaterReference=/path/to/updater
+gradlew clean test build dist -PwurmClientLibDir=/path/to/libraries -PchamomiloUpdaterReference=/path/to/updater -PwurmJavaFxJar=/path/to/jfxrt.jar
 ```
 
-Pass `-PwurmJavaFxJar=/path/to/jfxrt.jar` if JavaFX is not bundled with the JDK.
-The verified installation ZIP is written to **dist/**. Release checks cover both
-images, screen selection, reconnect caching, the startup-renderer hook and exact
-updater contents in the mod JAR and ZIP.
+The installable ZIP is written to **dist/**. Release checks cover artwork,
+selection, fallback, reconnect, packaged startup and saved Settings through Wurm's
+actual loader. The build also verifies the complete canonical updater's entry
+names and bytes in the mod JAR and ZIP.
 
 ## License
 
-Source code is licensed under [GPL-3.0](LICENSE). The main JAR includes the full
-license at `META-INF/LICENSE.txt`.
+Source code is licensed under [GPL-3.0](LICENSE). The complete license is included
+in the main JAR at `META-INF/LICENSE.txt`.
 
 Wurm and Sklotopolis names and branding belong to their respective owners.
 This is an unofficial fan-made mod, unaffiliated with Wurm Online,
