@@ -16,9 +16,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /** Loads the 4K branded startup-screen resource pack. */
-public final class HighResStartupMod implements org.gotti.wurmunlimited.modloader.interfaces.ModListener, WurmClientMod, Configurable,
+public final class HighResStartupMod implements
+        org.gotti.wurmunlimited.modloader.interfaces.ModListener,
+        WurmClientMod, Configurable,
         PreInitable, Initable {
-    public static final String VERSION = "0.3.6";
+    public static final String VERSION = "0.3.9";
     private static final Logger LOG = Logger.getLogger("HighResStartup");
 
     @Override
@@ -74,6 +76,9 @@ public final class HighResStartupMod implements org.gotti.wurmunlimited.modloade
                 + " initialized");
     }
 
-    @Override public void modInitialized(org.gotti.wurmunlimited.modloader.interfaces.ModEntry<?> entry) {
+    @Override
+    public void modInitialized(
+            org.gotti.wurmunlimited.modloader.interfaces.ModEntry<?> entry) {
         org.chamomilo.wurm.update.SharedUpdateCoordinator.modInitialized(entry);
-    }}
+    }
+}

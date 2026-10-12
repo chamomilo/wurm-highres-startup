@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.highresstartup'
-version = '0.3.6'
+version = '0.3.9'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -56,6 +56,18 @@ tasks.withType(JavaCompile) {
 
 jar {
     archiveFileName = "highres-startup-${project.version}.jar"
+    from('LICENSE') {
+        into 'META-INF'
+        rename { 'LICENSE.txt' }
+    }
+    manifest.attributes('Implementation-Title': 'HighRes Startup',
+            'Implementation-Version': project.version)
+}
+
+tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+    duplicatesStrategy = DuplicatesStrategy.FAIL
 }
 
 task resourcePack(type: Jar) {
@@ -127,11 +139,29 @@ task dist(type: Zip, dependsOn: verifyArtifacts) {
     into('mods/highres-startup') {
         from jar
         from resourcePack
-        from 'README.md'
-        from 'LICENSE'
     }
     into('mods') {
         from 'mods/highres-startup.properties'
+    }
+    from 'README.txt'
+
+    doLast {
+        def archive = new java.util.zip.ZipFile(archiveFile.get().asFile)
+        try {
+            def actual = java.util.Collections.list(archive.entries())
+                    .findAll { !it.directory }.collect { it.name }
+            def expected = [
+                    'README.txt',
+                    'mods/highres-startup.properties',
+                    "mods/highres-startup/highres-startup-${project.version}.jar".toString(),
+                    "mods/highres-startup/highres-startup-resources-${project.version}.jar".toString()
+            ]
+            if (actual.size() != expected.size() || actual.toSet() != expected.toSet()) {
+                throw new GradleException('Distribution must contain only the three mod files and README.txt: ' + actual)
+            }
+        } finally {
+            archive.close()
+        }
     }
 }
 
